@@ -1,3 +1,5 @@
+/** @format */
+
 import 'minireset.css/minireset.css';
 
 import 'nprogress/nprogress.css';
@@ -13,6 +15,7 @@ import router from './router';
 import store from './store';
 
 Vue.use(Element);
+
 Vue.config.productionTip = false;
 
 new Vue({
