@@ -25,7 +25,12 @@ export default class CaptchaImage extends Vue {
   @Emit('updateCaptchaImage')
   async getCaptchaImage() {
     try {
-      const { code } = await apiGetCaptcha();
+      const { code, data } = await apiGetCaptcha();
+      if (code === '00000') {
+        this.captchaUrl = data.verImage;
+        this.$emit('update:verKey', data.verKey);
+        this.$emit('updateCaptchaImage');
+      }
     } catch (error) {
       console.warn(error);
     }
@@ -41,6 +46,8 @@ export default class CaptchaImage extends Vue {
 </script>
 <style lang="scss" module>
 .captcha-image {
+  cursor: pointer;
+  border: 1px solid gray;
   object-fit: cover;
 }
 </style>

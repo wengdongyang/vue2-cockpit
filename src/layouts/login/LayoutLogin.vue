@@ -32,7 +32,12 @@
                   />
                 </el-col>
                 <el-col :span="6">
-                  <CaptchaImage :verKey.sync="loginFormState.verKey" @updateCaptchaImage="onUpdateCaptchaImage" />
+                  <CaptchaImage
+                    :class="$style['captcha-image']"
+                    :verKey.sync="loginFormState.verKey"
+                    @updateCaptchaImage="onUpdateCaptchaImage"
+                    ref="captchaImageRef"
+                  />
                 </el-col>
               </el-row>
             </el-form-item>
@@ -50,9 +55,10 @@
 </template>
 
 <script>
-import * as lodash from 'lodash';
+import { Message } from 'element-ui';
 import { Component, Vue } from 'vue-property-decorator';
 // apis
+import { apiPostLoginApi } from '@src/apis';
 // utils
 // types
 // mixins
@@ -61,13 +67,14 @@ import { Component, Vue } from 'vue-property-decorator';
 // components
 import CaptchaImage from './components/CaptchaImage.vue';
 @Component({ components: { CaptchaImage } })
-export default class HomeView extends Vue {
+export default class LayoutLogin extends Vue {
   data() {
     return {
       loginFormState: { account: null, password: null, verKey: null, verCode: null },
       isRemember: false,
 
       loginFormStateRef: null,
+      captchaImageRef: null,
     };
   }
 
@@ -83,7 +90,13 @@ export default class HomeView extends Vue {
     try {
       const isOk = await this.$refs.loginFormStateRef?.validate();
       if (isOk) {
-        console.error(isOk);
+        const data = this.loginFormState;
+        const { code, message } = await apiPostLoginApi(data);
+        if (code === '00000') {
+          Message.success(message);
+        } else {
+          Message.error(message);
+        }
       }
     } catch (error) {
       console.warn(error);
@@ -92,8 +105,7 @@ export default class HomeView extends Vue {
 
   onUpdateCaptchaImage() {
     try {
-      const prevLoginFormState = lodash.get(this.loginFormState);
-      this.loginFormState = Object.assign({}, prevLoginFormState, { verCode: null });
+      this.loginFormState.verCode = null;
     } catch (error) {
       console.warn(error);
     }

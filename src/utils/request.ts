@@ -23,7 +23,7 @@ request.interceptors.request.use(
     const { headers, url = '' } = config;
 
     // 不需要token的白名单
-    if (['/captcha'].includes(url)) {
+    if (['/captcha', '/loginApi'].includes(url)) {
       return config;
     } else {
       const token = sessionStorage.getItem(ENV.TOKEN_KEY);
@@ -51,14 +51,14 @@ request.interceptors.response.use(
     if (status === 200) {
       return Promise.resolve(data);
     } else {
-      return Promise.reject(response);
+      return Promise.resolve(data);
     }
   },
   (error: AxiosError) => {
     if (NProgress.isRendered()) {
       NProgress.done();
     }
-    return Promise.resolve(error);
+    return Promise.resolve(error.response?.data || {});
   },
 );
 
