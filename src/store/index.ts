@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 import storeLoginFormState from './storeLoginFormState';
 // apis
 // utils
+// types
 // mixins
 // stores
 // configs

@@ -2,6 +2,7 @@
 import createPersistedState from 'vuex-persistedstate';
 // apis
 // utils
+// types
 // mixins
 // stores
 // configs
@@ -9,7 +10,7 @@ import * as types from './mutation-types';
 // components
 
 interface ILOGIN_FORM_STATE {
-  username: string;
+  account: string;
   password: string;
   [key: string]: any;
 }

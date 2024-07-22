@@ -16,7 +16,8 @@ module.exports = defineConfig({
   },
   devServer: {
     proxy: {
-      '/screenAdmin': { target: 'http://124.91.150.6:10904', changeOrigin: true },
+      // '/screenAdmin': { target: 'http://124.91.150.6:10904', changeOrigin: true },
+      '/screenAdmin': { target: 'http://10.2.0.215:8050', changeOrigin: true },
     },
   },
 });
