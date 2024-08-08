@@ -58,7 +58,7 @@ request.interceptors.response.use(
     if (NProgress.isRendered()) {
       NProgress.done();
     }
-    return Promise.resolve(error.response?.data || {});
+    return Promise.reject(error.response?.data || {});
   },
 );
 

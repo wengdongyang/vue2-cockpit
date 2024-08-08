@@ -81,6 +81,7 @@ import { apiPostLoginApi } from '@src/apis';
 // stores
 import { useLoginFormState } from '@src/store/storeLoginFormState';
 // configs
+import { ENV } from '@src/configs';
 // components
 import CaptchaImage from './components/CaptchaImage.vue';
 const { Item: FormModelItem } = FormModel;
@@ -144,11 +145,12 @@ export default class LayoutLogin extends Vue {
       const { loginFormState, isRemember } = this;
       const isOk = await this.$refs.loginFormStateRef?.validate();
       if (isOk) {
-        const data = this.loginFormState;
-        const { code, message } = await apiPostLoginApi(data);
+        const { code, data, message } = await apiPostLoginApi(loginFormState);
         if (code === '00000') {
           Message.success(message);
           storeLoginFormState.setLoginFormState(isRemember ? loginFormState : {});
+
+          sessionStorage.setItem();
         } else {
           Message.error(message);
           this.$refs.captchaImageRef?.getCaptchaImage();
