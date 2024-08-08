@@ -26,7 +26,7 @@ export default class CaptchaImage extends Vue {
   async getCaptchaImage() {
     try {
       const { code, data } = await apiGetCaptcha();
-      if (code === '00000') {
+      if (code === 200) {
         this.captchaUrl = data.verImage;
         this.$emit('update:verKey', data.verKey);
         this.$emit('updateCaptchaImage');

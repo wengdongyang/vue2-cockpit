@@ -1,6 +1,5 @@
 /** @format */
-
-import { faker } from '@faker-js/faker';
+import Mock from 'mockjs';
 // apis
 // hooks
 // utils
@@ -10,18 +9,19 @@ import { resultSuccess } from './_util';
 // mixins
 // configs
 // components
-export default [
+
+[
   {
     url: '/mock/carousel',
-    response: ({ query, body }) => {
+    response: () => {
       return resultSuccess({
-        'list|20': [{ name: '@cname', 'image|1': faker.image.dataUri({ width: 100, height: 32, type: 'base64' }) }],
+        'list|20': [{ name: '@cname', 'image|1': '@cname' }],
       });
     },
   },
   {
     url: '/mock/carouselTable',
-    response: ({ query, body }) => {
+    response: () => {
       return resultSuccess({
         'list|20': [{ name: '@cname', 'age|+1': 10, address: `@county` }],
         total: 10,
@@ -30,7 +30,7 @@ export default [
   },
   {
     url: '/mock/chartBar',
-    response: ({ query, body }) => {
+    response: () => {
       return resultSuccess({
         'list|10': [{ cname: '@cname', 'num|+1': 10 }],
         total: 10,
@@ -39,7 +39,7 @@ export default [
   },
   {
     url: '/mock/chartGauge',
-    response: ({ query, body }) => {
+    response: () => {
       return resultSuccess({
         'num|1-100': 100,
       });
@@ -47,7 +47,7 @@ export default [
   },
   {
     url: '/mock/chartLiquid',
-    response: ({ query, body }) => {
+    response: () => {
       return resultSuccess({
         'num|1-100': 100,
       });
@@ -55,7 +55,7 @@ export default [
   },
   {
     url: '/mock/chartLine',
-    response: ({ query, body }) => {
+    response: () => {
       return resultSuccess({
         'list|10': [{ cname: '@cname', 'num|+1': 10 }],
         total: 10,
@@ -64,7 +64,7 @@ export default [
   },
   {
     url: '/mock/chartPie',
-    response: ({ query, body }) => {
+    response: () => {
       return resultSuccess({
         'list|10': [{ cname: '@cname', 'num|+1': 10 }],
         total: 10,
@@ -73,11 +73,11 @@ export default [
   },
   {
     url: '/mock/chartPyramid',
-    response: ({ query, body }) => {
+    response: () => {
       return resultSuccess({
         'list|10': [{ cname: '@cname', 'num|+1': 10 }],
         total: 10,
       });
     },
   },
-];
+].forEach((element) => Mock.mock(element.url, element.method || 'get', element.response()));

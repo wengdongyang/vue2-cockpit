@@ -74,12 +74,12 @@ import { Button, Checkbox, Col, FormModel, Input, Row } from 'ant-design-vue';
 import { Message } from 'element-ui';
 import { Component, Vue } from 'vue-property-decorator';
 // apis
-import { apiPostLoginApi } from '@src/apis';
+import { apiPostLogin } from '@src/apis';
 // utils
 // types
 // mixins
 // stores
-import { useLoginFormState } from '@src/store/storeLoginFormState';
+import { useLoginFormState, useUserInfo } from '@src/store';
 // configs
 import { ENV } from '@src/configs';
 // components
@@ -141,18 +141,21 @@ export default class LayoutLogin extends Vue {
 
   async onClickLogin() {
     try {
+      const storeUserInfo = useUserInfo();
       const storeLoginFormState = useLoginFormState();
       const { loginFormState, isRemember } = this;
       const isOk = await this.$refs.loginFormStateRef?.validate();
       if (isOk) {
-        const { code, data, message } = await apiPostLoginApi(loginFormState);
-        if (code === '00000') {
-          Message.success(message);
+        const { code, data, msg } = await apiPostLogin(loginFormState);
+        if (code === 200) {
+          Message.success(msg);
+          storeUserInfo.setUserInfo(data);
           storeLoginFormState.setLoginFormState(isRemember ? loginFormState : {});
+          sessionStorage.setItem(ENV.TOKEN_KEY, data.token);
 
-          sessionStorage.setItem();
+          this.$router.push({ path: '/demo' });
         } else {
-          Message.error(message);
+          Message.error(msg);
           this.$refs.captchaImageRef?.getCaptchaImage();
         }
       }

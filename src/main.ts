@@ -14,6 +14,8 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 
+import './mocks/index.js';
+
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
 

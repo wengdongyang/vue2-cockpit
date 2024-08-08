@@ -1,6 +1,5 @@
 /** @format */
-
-import { faker } from '@faker-js/faker';
+import * as Mock from 'mockjs';
 // apis
 // hooks
 // utils
@@ -10,18 +9,19 @@ import { resultSuccess } from './_util';
 // mixins
 // configs
 // components
-export default [
+
+[
   {
     url: '/mock/captcha',
-    response: ({ query, body }) => {
-      return resultSuccess(faker.image.dataUri({ width: 100, height: 32, type: 'base64' }));
+    response: () => {
+      return resultSuccess({ verImage: '@dataImage', verKey: '@id' });
     },
   },
   {
     url: '/mock/login',
     method: 'post',
-    response: ({ query, body }) => {
-      return resultSuccess({ userName: '@cname', token: '@string(20)', 'auth|1': ['superAdmin', 'user'] });
+    response: () => {
+      return resultSuccess({ userName: '@cname', token: '@guid', 'auth|1': ['superAdmin', 'user'] });
     },
   },
-];
+].forEach((element) => Mock.mock(element.url, element.method || 'get', element.response()));

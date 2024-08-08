@@ -9,18 +9,25 @@ import { defineStore } from 'pinia';
 // stores
 // configs
 // components
-interface I_LOGIN_FORM_STATE {
-  account?: string;
-  password?: string;
+type I_LOGIN_FORM_STATE = Partial<{
+  account: string;
+  password: string;
   [key: string]: any;
-}
-interface IStoreLoginFormState {
+}>;
+interface I_STORE_LOGIN_FORM_STATE {
   STORAGE_TIME: string;
   IS_REMEMBER: boolean;
   LOGIN_FORM_STATE: I_LOGIN_FORM_STATE;
 }
+
+type I_USER_INFO = Partial<{
+  userName: string;
+  token: string;
+  auth: string;
+}>;
+
 export const useLoginFormState = defineStore('loginFormState', {
-  state: (): IStoreLoginFormState => {
+  state: (): I_STORE_LOGIN_FORM_STATE => {
     return {
       STORAGE_TIME: '', // 存储时间
       IS_REMEMBER: false, // 是否记住密码
@@ -28,9 +35,9 @@ export const useLoginFormState = defineStore('loginFormState', {
     };
   },
   getters: {
-    storageTime: (state: IStoreLoginFormState) => state.STORAGE_TIME,
-    isRemember: (state: IStoreLoginFormState) => state.IS_REMEMBER,
-    loginFormState: (state: IStoreLoginFormState) => state.LOGIN_FORM_STATE,
+    storageTime: (state: I_STORE_LOGIN_FORM_STATE) => state.STORAGE_TIME,
+    isRemember: (state: I_STORE_LOGIN_FORM_STATE) => state.IS_REMEMBER,
+    loginFormState: (state: I_STORE_LOGIN_FORM_STATE) => state.LOGIN_FORM_STATE,
   },
   actions: {
     checkLoginFormState() {
@@ -65,4 +72,26 @@ export const useLoginFormState = defineStore('loginFormState', {
     },
   },
   persist: { storage: localStorage },
+});
+
+export const useUserInfo = defineStore('userinfo', {
+  state: (): { USER_INFO: I_USER_INFO } => {
+    return {
+      USER_INFO: {}, // userinfo
+    };
+  },
+  getters: {
+    userInfo: (state) => state.USER_INFO,
+    token: (state) => state.USER_INFO.token,
+  },
+  actions: {
+    setUserInfo(userinfo: I_USER_INFO) {
+      try {
+        this.USER_INFO = userinfo;
+      } catch (error) {
+        console.warn(error);
+      }
+    },
+  },
+  persist: { storage: sessionStorage },
 });

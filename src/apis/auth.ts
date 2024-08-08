@@ -7,13 +7,10 @@ import { requestGet, requestPost } from '@src/utils';
 // stores
 // configs
 // components
+export const apiPostLogin = (data: any) => {
+  return requestPost({ baseURL: '/mock', url: '/login', data });
+};
 
-export const apiPostLoginApi = (data: any) => {
-  return requestPost({ baseURL: '/screenAdmin', url: '/loginApi', data });
-};
-export const apiGetRefresh = () => {
-  return requestGet({ baseURL: '/screenAdmin', url: '/refresh' });
-};
 export const apiGetCaptcha = () => {
-  return requestGet({ baseURL: '/screenAdmin', url: '/captcha' });
+  return requestGet({ baseURL: '/mock', url: '/captcha' });
 };
