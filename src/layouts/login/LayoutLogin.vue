@@ -1,53 +1,68 @@
 <!-- @format -->
-
 <template>
   <section :class="$style['login-layout']">
     <section :class="$style['login-content']">
       <section :class="$style['login-form-layout']">
         <header :class="$style['login-form-header']">柯桥智治大脑</header>
         <section :class="$style['login-form-content']">
-          <el-form :class="$style['form']" :model="loginFormState" :rules="loginFormRules" ref="loginFormStateRef">
-            <el-form-item :class="$style['form-item']" prop="account">
-              <el-input class="input" :class="$style['input']" v-model="loginFormState.account" placeholder="用户名">
-                <template #prefix>
-                  <i class="el-input__icon el-icon-user" />
-                </template>
-              </el-input>
-            </el-form-item>
-            <el-form-item :class="$style['form-item']" prop="password">
-              <el-input class="input" :class="$style['input']" v-model="loginFormState.password" placeholder="密码">
-                <template #prefix>
-                  <i class="el-input__icon el-icon-lock" />
-                </template>
-              </el-input>
-            </el-form-item>
-            <el-form-item :class="$style['form-item']" prop="verCode">
-              <el-row :gutter="12">
-                <el-col :span="18">
-                  <el-input
+          <FormModel
+            :class="$style['form']"
+            :model="loginFormState"
+            :rules="loginFormRules"
+            ref="loginFormStateRef"
+            size="large"
+          >
+            <FormModelItem :class="$style['form-item']" prop="account">
+              <Input
+                class="input"
+                :class="$style['input']"
+                v-model="loginFormState.account"
+                placeholder="用户名"
+                size="large"
+                allowClear
+              />
+            </FormModelItem>
+            <FormModelItem :class="$style['form-item']" prop="password">
+              <Password
+                class="input"
+                :class="$style['input']"
+                v-model="loginFormState.password"
+                placeholder="密码"
+                size="large"
+                allowClear
+              />
+            </FormModelItem>
+            <FormModelItem :class="$style['form-item']" prop="verCode">
+              <Row :gutter="12">
+                <Col :span="18">
+                  <Input
                     class="input"
                     :class="[$style['input'], $style['input-ver-code']]"
                     v-model="loginFormState.verCode"
                     placeholder="验证码"
+                    size="large"
+                    allowClear
                   />
-                </el-col>
-                <el-col :span="6">
+                </Col>
+                <Col :span="6">
                   <CaptchaImage
                     :class="$style['captcha-image']"
                     :verKey.sync="loginFormState.verKey"
                     @updateCaptchaImage="onUpdateCaptchaImage"
                     ref="captchaImageRef"
                   />
-                </el-col>
-              </el-row>
-            </el-form-item>
-            <el-form-item :class="$style['form-item']">
-              <el-checkbox class="checkbox" :class="$style['checkbox']" v-model="isRemember">记住密码</el-checkbox>
-            </el-form-item>
-            <el-form-item :class="$style['form-item']">
-              <el-button :class="$style['login-btn']" type="primary" @click="onClickLogin"> 登录 </el-button>
-            </el-form-item>
-          </el-form>
+                </Col>
+              </Row>
+            </FormModelItem>
+            <FormModelItem :class="$style['form-item']">
+              <Checkbox class="checkbox" :class="$style['checkbox']" v-model="isRemember" size="large">
+                记住密码
+              </Checkbox>
+            </FormModelItem>
+            <FormModelItem :class="$style['form-item']">
+              <Button :class="$style['login-btn']" type="primary" size="large" @click="onClickLogin"> 登录 </Button>
+            </FormModelItem>
+          </FormModel>
         </section>
       </section>
     </section>
@@ -55,6 +70,7 @@
 </template>
 
 <script>
+import { Button, Checkbox, Col, FormModel, Input, Row } from 'ant-design-vue';
 import { Message } from 'element-ui';
 import { Component, Vue } from 'vue-property-decorator';
 // apis
@@ -63,21 +79,38 @@ import { apiPostLoginApi } from '@src/apis';
 // types
 // mixins
 // stores
+import { useLoginFormState } from '@src/store/storeLoginFormState';
 // configs
 // components
 import CaptchaImage from './components/CaptchaImage.vue';
-@Component({ components: { CaptchaImage } })
+const { Item: FormModelItem } = FormModel;
+const { Password } = Input;
+@Component({ components: { CaptchaImage, Button, Checkbox, Col, FormModel, FormModelItem, Input, Row, Password } })
 export default class LayoutLogin extends Vue {
-  data() {
-    return {
-      loginFormState: { account: null, password: null, verKey: null, verCode: null },
-      isRemember: false,
+  loginFormState = { account: '', password: '', verKey: null, verCode: null };
+  isRemember = false;
 
-      loginFormStateRef: null,
-      captchaImageRef: null,
-    };
+  loginFormStateRef;
+  captchaImageRef;
+
+  get computedIsRemember() {
+    try {
+      const storeLoginFormState = useLoginFormState();
+      return storeLoginFormState.isRemember;
+    } catch (error) {
+      console.warn(error);
+      return false;
+    }
   }
-
+  get computedLoginFormState() {
+    try {
+      const storeLoginFormState = useLoginFormState();
+      return storeLoginFormState.loginFormState;
+    } catch (error) {
+      console.warn(error);
+      return {};
+    }
+  }
   get loginFormRules() {
     return {
       account: [{ required: true, message: '用户名 - 必填' }],
@@ -85,17 +118,40 @@ export default class LayoutLogin extends Vue {
       verCode: [{ required: true, message: '验证码 - 必填' }],
     };
   }
+  checkLoginFormState() {
+    try {
+      const storeLoginFormState = useLoginFormState();
+      storeLoginFormState.checkLoginFormState();
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+  initFormState() {
+    try {
+      const { computedIsRemember, computedLoginFormState, loginFormState } = this;
+      if (computedIsRemember) {
+        this.isRemember = computedIsRemember;
+        this.loginFormState = Object.assign({}, loginFormState, computedLoginFormState);
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  }
 
   async onClickLogin() {
     try {
+      const storeLoginFormState = useLoginFormState();
+      const { loginFormState, isRemember } = this;
       const isOk = await this.$refs.loginFormStateRef?.validate();
       if (isOk) {
         const data = this.loginFormState;
         const { code, message } = await apiPostLoginApi(data);
         if (code === '00000') {
           Message.success(message);
+          storeLoginFormState.setLoginFormState(isRemember ? loginFormState : {});
         } else {
           Message.error(message);
+          this.$refs.captchaImageRef?.getCaptchaImage();
         }
       }
     } catch (error) {
@@ -111,29 +167,17 @@ export default class LayoutLogin extends Vue {
     }
   }
 
-  created() {}
-  mounted() {}
+  created() {
+    this.checkLoginFormState();
+  }
+  mounted() {
+    this.$nextTick(() => {
+      this.initFormState();
+    });
+  }
   destroy() {}
 }
 </script>
 <style lang="scss" module>
 @import './LayoutLogin.scss';
-</style>
-<style lang="scss" scoped>
-.input {
-  margin: 0;
-  ::v-deep(.el-input__inner) {
-    color: #333;
-    border-color: #eee;
-    background-color: white;
-  }
-}
-.checkbox {
-  margin: 0;
-  ::v-deep(.el-checkbox__label) {
-    color: #333;
-    border-color: #eee;
-    background-color: white;
-  }
-}
 </style>

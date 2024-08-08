@@ -11,7 +11,7 @@ import { ENV } from '@src/configs';
 // components
 // 创建axios实例
 const request = axios.create({
-  timeout: 10000,
+  timeout: 1000 * 10,
 });
 // request拦截器
 request.interceptors.request.use(
@@ -88,7 +88,9 @@ export const requestDownload = async <T = any>(option: AxiosRequestConfig) => {
 };
 
 export const requestUpload = async <T = any>(option: AxiosRequestConfig) => {
-  const res = await request(Object.assign({ method: 'POST', headersType: 'multipart/form-data' }, option));
+  const res = await request(
+    Object.assign({ method: 'POST', headersType: 'multipart/form-data', timeout: 1000 * 60 }, option),
+  );
   return res as unknown as T;
 };
 

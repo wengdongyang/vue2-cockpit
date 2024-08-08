@@ -45,9 +45,5 @@ export default class CaptchaImage extends Vue {
 }
 </script>
 <style lang="scss" module>
-.captcha-image {
-  cursor: pointer;
-  border: 1px solid gray;
-  object-fit: cover;
-}
+@import './CaptchaImage.scss';
 </style>

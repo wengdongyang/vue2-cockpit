@@ -1,51 +1,68 @@
 /** @format */
-import createPersistedState from 'vuex-persistedstate';
+import dayjs from 'dayjs';
+import * as lodash from 'lodash';
+import { defineStore } from 'pinia';
 // apis
 // utils
 // types
 // mixins
 // stores
 // configs
-import * as types from './mutation-types';
 // components
-
-interface ILOGIN_FORM_STATE {
-  account: string;
-  password: string;
+interface I_LOGIN_FORM_STATE {
+  account?: string;
+  password?: string;
   [key: string]: any;
 }
-
 interface IStoreLoginFormState {
+  STORAGE_TIME: string;
   IS_REMEMBER: boolean;
-  LOGIN_FORM_STATE: ILOGIN_FORM_STATE;
+  LOGIN_FORM_STATE: I_LOGIN_FORM_STATE;
 }
-
-const storeLoginFormState = {
-  state: {
-    IS_REMEMBER: false,
-    LOGIN_FORM_STATE: {},
+export const useLoginFormState = defineStore('loginFormState', {
+  state: (): IStoreLoginFormState => {
+    return {
+      STORAGE_TIME: '', // 存储时间
+      IS_REMEMBER: false, // 是否记住密码
+      LOGIN_FORM_STATE: {}, // 账号密码
+    };
   },
   getters: {
+    storageTime: (state: IStoreLoginFormState) => state.STORAGE_TIME,
     isRemember: (state: IStoreLoginFormState) => state.IS_REMEMBER,
     loginFormState: (state: IStoreLoginFormState) => state.LOGIN_FORM_STATE,
   },
-  mutations: {
-    [types.SET_IS_REMEMBER](state: IStoreLoginFormState, isRemember: boolean) {
-      state.IS_REMEMBER = isRemember;
-    },
-    [types.SET_LOGIN_FORM_STATE](state: IStoreLoginFormState, loginFormState: ILOGIN_FORM_STATE) {
-      state.LOGIN_FORM_STATE = loginFormState;
-    },
-  },
   actions: {
-    setIsRemember(context: any, isRemember: boolean) {
-      context.commit(types.SET_IS_REMEMBER, isRemember);
+    checkLoginFormState() {
+      try {
+        const storageTime = this.STORAGE_TIME;
+        const now = dayjs();
+        if ((storageTime && now.subtract(1, 'week').isAfter(dayjs(storageTime))) || !storageTime) {
+          this.IS_REMEMBER = false;
+          this.LOGIN_FORM_STATE = {};
+          this.STORAGE_TIME = '';
+        }
+      } catch (error) {
+        console.warn(error);
+      }
     },
-    setLoginFormState(context: any, loginFormState: ILOGIN_FORM_STATE) {
-      context.commit(types.SET_LOGIN_FORM_STATE, loginFormState);
+    setLoginFormState(loginFormState: I_LOGIN_FORM_STATE) {
+      try {
+        if (loginFormState && !lodash.isEmpty(loginFormState)) {
+          const account = lodash.get(loginFormState, ['account']);
+          const password = lodash.get(loginFormState, ['password']);
+          this.IS_REMEMBER = true;
+          this.LOGIN_FORM_STATE = { account, password };
+          this.STORAGE_TIME = dayjs().format('YYYY-MM-DD HH:mm:ss');
+        } else {
+          this.IS_REMEMBER = false;
+          this.LOGIN_FORM_STATE = {};
+          this.STORAGE_TIME = '';
+        }
+      } catch (error) {
+        console.warn(error);
+      }
     },
   },
-  plugins: [createPersistedState({ storage: localStorage })],
-};
-
-export default storeLoginFormState;
+  persist: { storage: localStorage },
+});
