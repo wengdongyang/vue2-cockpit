@@ -4,7 +4,6 @@ import 'minireset.css/minireset.css';
 import 'nprogress/nprogress.css';
 
 import 'element-theme-dark';
-import 'element-ui/lib/theme-chalk/index.css';
 
 import Element from 'element-ui';
 import { PiniaVuePlugin, createPinia } from 'pinia';
