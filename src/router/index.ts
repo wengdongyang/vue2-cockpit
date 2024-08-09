@@ -27,11 +27,9 @@ router.beforeEach((to, from, next) => {
   if (!['/', '/login'].includes(to.path)) {
     if (sessionStorage.getItem(ENV.TOKEN_KEY)) {
       next();
-      return;
     } else {
       Message.error('未登录!');
       next({ path: '/login' });
-      return;
     }
   } else {
     next();

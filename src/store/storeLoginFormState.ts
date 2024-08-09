@@ -1,6 +1,6 @@
 /** @format */
 import dayjs from 'dayjs';
-import * as lodash from 'lodash';
+import lodash from 'lodash';
 import { defineStore } from 'pinia';
 // apis
 // utils

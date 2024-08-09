@@ -1,10 +1,7 @@
 /** @format */
-import 'minireset.css/minireset.css';
-import 'ant-design-vue/dist/antd.css';
 import 'font-awesome/css/font-awesome.css';
+import 'minireset.css/minireset.css';
 import 'nprogress/nprogress.css';
-
-import 'tailwindcss/tailwind.css';
 
 import 'element-theme-dark';
 import 'element-ui/lib/theme-chalk/index.css';

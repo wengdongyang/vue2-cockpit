@@ -14,7 +14,6 @@
           >
             <FormModelItem :class="$style['form-item']" prop="account">
               <Input
-                class="input"
                 :class="$style['input']"
                 v-model="loginFormState.account"
                 placeholder="用户名"
@@ -24,7 +23,6 @@
             </FormModelItem>
             <FormModelItem :class="$style['form-item']" prop="password">
               <Password
-                class="input"
                 :class="$style['input']"
                 v-model="loginFormState.password"
                 placeholder="密码"
@@ -36,7 +34,6 @@
               <Row :gutter="12">
                 <Col :span="18">
                   <Input
-                    class="input"
                     :class="[$style['input'], $style['input-ver-code']]"
                     v-model="loginFormState.verCode"
                     placeholder="验证码"
@@ -55,9 +52,7 @@
               </Row>
             </FormModelItem>
             <FormModelItem :class="$style['form-item']">
-              <Checkbox class="checkbox" :class="$style['checkbox']" v-model="isRemember" size="large">
-                记住密码
-              </Checkbox>
+              <Checkbox :class="$style['checkbox']" v-model="isRemember" size="large"> 记住密码 </Checkbox>
             </FormModelItem>
             <FormModelItem :class="$style['form-item']">
               <Button :class="$style['login-btn']" type="primary" size="large" @click="onClickLogin"> 登录 </Button>
