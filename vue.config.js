@@ -6,8 +6,8 @@ module.exports = defineConfig({
   publicPath: '.',
   css: {
     loaderOptions: {
-      scss: {
-        // additionalData: `@import "${resolve('/src/styles/mixins/index.scss')}";`, // less前置
+      less: {
+        additionalData: `@import "${resolve('/src/styles/mixins/index.less')}";`, // less前置
       },
     },
   },
