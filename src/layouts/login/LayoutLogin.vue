@@ -183,6 +183,6 @@ export default class LayoutLogin extends Vue {
   destroy() {}
 }
 </script>
-<style lang="scss" module>
-@import './LayoutLogin.scss';
+<style lang="less" module>
+@import './LayoutLogin.less';
 </style>

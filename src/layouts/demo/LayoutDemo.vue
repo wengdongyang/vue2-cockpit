@@ -26,6 +26,6 @@ export default class LayoutDemo extends Vue {
   destroy() {}
 }
 </script>
-<style lang="scss" module>
-@import './LayoutDemo.scss';
+<style lang="less" module>
+@import './LayoutDemo.less';
 </style>

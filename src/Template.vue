@@ -39,6 +39,4 @@ export default class HomeView extends Vue {
   destroy = () => {};
 }
 </script>
-<style lang="scss" module>
-@import './LayoutLogin.scss';
-</style>
+<style lang="less" module></style>

@@ -4,6 +4,8 @@ import 'ant-design-vue/dist/antd.css';
 import 'font-awesome/css/font-awesome.css';
 import 'nprogress/nprogress.css';
 
+import 'tailwindcss/tailwind.css';
+
 import 'element-theme-dark';
 import 'element-ui/lib/theme-chalk/index.css';
 

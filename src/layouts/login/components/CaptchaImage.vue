@@ -44,6 +44,6 @@ export default class CaptchaImage extends Vue {
   destroy() {}
 }
 </script>
-<style lang="scss" module>
-@import './CaptchaImage.scss';
+<style lang="less" module>
+@import './CaptchaImage.less';
 </style>
