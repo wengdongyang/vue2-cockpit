@@ -20,14 +20,18 @@ export default class HomeView extends Vue {
   @Prop({ type: Number }) propA;
   @PropSync('name', { type: String }) syncedName;
 
+  data() {
+    return {
+      loginFormState: {
+        account: null,
+        password: null,
+      },
+      isRemember: false,
+    };
+  }
+
   @Watch('child')
   onChildChanged(val, oldVal) {}
-
-  loginFormState = {
-    account: null,
-    password: null,
-  };
-  isRemember = false;
 
   @Emit('addToCount')
   addToCount(n) {}
